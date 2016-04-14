@@ -1,7 +1,6 @@
 package kyeah.gitterbomb
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.support.annotation.NonNull
 import android.support.v7.app.AppCompatActivity
@@ -32,7 +31,8 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                 getString(oauth_key), getString(oauth_secret), getString(uri_login_redirect)));
 
         val gitterAccessUrl = GitterOauthUtils.buildOauthUrl()
-        intent = Intent(Intent.ACTION_VIEW, Uri.parse(gitterAccessUrl))
+        intent = Intent(this, WebViewActivity::class.java)
+        intent.putExtra("url", gitterAccessUrl)
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY or Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent)
     }
