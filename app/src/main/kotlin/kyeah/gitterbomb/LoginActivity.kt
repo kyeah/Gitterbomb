@@ -3,6 +3,7 @@ package kyeah.gitterbomb
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.support.annotation.NonNull
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.amatkivskiy.gitter.sdk.GitterOauthUtils
@@ -32,10 +33,11 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
         val gitterAccessUrl = GitterOauthUtils.buildOauthUrl()
         intent = Intent(Intent.ACTION_VIEW, Uri.parse(gitterAccessUrl))
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY or Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent)
     }
 
-    private fun completeLogin(access_code: String) {
+    private fun completeLogin(@NonNull access_code: String) {
         val authenticationClient = RxGitterAuthenticationClient.Builder().build();
         authenticationClient.getAccessToken(access_code).subscribe({
             GitterService.buildClient(it.accessToken)
