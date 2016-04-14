@@ -43,8 +43,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onNavigationItemSelected(item: MenuItem) = when (item.itemId) {
-        R.id.nav_camera -> drawer.consume {}
-        R.id.nav_gallery -> drawer.consume {}
+        R.id.nav -> drawer.consume {}
         else -> false
     }
 }
