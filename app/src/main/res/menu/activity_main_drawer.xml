@@ -1,13 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:title="Starred">
-        <menu/>
+    <item
+        android:id="@+id/starred"
+        android:title="@string/menu_starred">
+        <menu>
+            <group android:id="@+id/group_starred"/>
+        </menu>
     </item>
-    <item android:title="Rooms">
-        <menu/>
+    <item
+        android:Id="@+id/channels"
+        android:title="@string/menu_channels">
+        <menu>
+            <group android:id="@+id/group_channels"/>
+        </menu>
     </item>
-    <item android:title="Direct Chat">
-        <menu/>
+    <item
+        android:Id="@+id/orgs"
+        android:title="@string/menu_orgs">
+        <menu>
+            <group android:id="@+id/group_orgs"/>
+        </menu>
+    </item>
+    <item
+        android:Id="@+id/repos"
+        android:title="@string/menu_repos">
+        <menu>
+            <group android:id="@+id/group_repos"/>
+        </menu>
+    </item>
+    <item
+        android:id="@+id/direct_chat"
+        android:title="@string/menu_direct_chat">
+        <menu>
+            <group android:id="@+id/group_direct_chat"/>
+        </menu>
     </item>
 </menu>

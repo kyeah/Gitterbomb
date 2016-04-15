@@ -7,4 +7,9 @@
     <string name="action_settings">Settings</string>
 
     <string name="log_in_to_gitter">Log in to Gitter</string>
+    <string name="menu_direct_chat">Direct Chat</string>
+    <string name="menu_starred">Starred</string>
+    <string name="menu_channels">Channels</string>
+    <string name="menu_repos">Repos</string>
+    <string name="menu_orgs">Orgs</string>
 </resources>

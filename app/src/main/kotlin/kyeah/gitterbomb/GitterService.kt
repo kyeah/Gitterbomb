@@ -7,7 +7,7 @@ import com.amatkivskiy.gitter.sdk.rx.client.RxGitterApiClient
  */
 
 object GitterService {
-    var client: RxGitterApiClient? = null
+    var client: RxGitterApiClient = null!!
 
     fun buildClient(access_token: String) {
         client = RxGitterApiClient.Builder()
