@@ -15,13 +15,14 @@ import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.nav_header_main.*
+import java.util.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     data class MenuResult(val menu: SubMenu, val menuId: Int)
 
     var user: UserResponse? = null;
-    var rooms: List<RoomResponse>? = null;
+    var rooms: HashMap<String, RoomResponse> = HashMap();
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,8 +49,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         })
 
         GitterService.client.currentUserRooms.subscribe({
-            rooms = it
             for (i in IntRange(0, it.size - 1)) {
+                rooms.put(it[i].name, it[i])
                 val result = when (it[i].githubRoomType) {
                     RoomType.ONETOONE -> MenuResult(menuDirect, R.id.group_direct_chat)
                     RoomType.ORG, RoomType.ORG_CHANNEL -> MenuResult(menuOrgs, R.id.group_orgs)
@@ -81,8 +82,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         else -> super.onOptionsItemSelected(item)
     }
 
-    override fun onNavigationItemSelected(item: MenuItem) = when (item.itemId) {
-        R.id.nav -> drawer.consume {}
-        else -> false
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        val room = rooms[item.title] ?: return false
+
+        val bundle = Bundle()
+        val chatFragment = ChatFragment()
+        bundle.putString("roomId", room.id)
+        chatFragment.arguments = bundle
+
+        supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.content_main, chatFragment)
+                .commit()
+
+        return true
     }
 }
