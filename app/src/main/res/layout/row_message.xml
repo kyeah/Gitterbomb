@@ -2,8 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:padding="@dimen/row_message_padding">
+    android:layout_margin="@dimen/row_message_margin"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <ImageView
         android:id="@+id/icon"
@@ -38,6 +38,7 @@
         android:layout_toRightOf="@id/icon"
         android:layout_toEndOf="@id/icon"
         android:layout_below="@id/name"
-        android:layout_margin="@dimen/row_message_name_margin"
+        android:layout_marginLeft="@dimen/row_message_name_margin"
+        android:layout_marginBottom="@dimen/row_message_name_margin"
         tools:text="@string/hipster_ipsum"/>
 </>
