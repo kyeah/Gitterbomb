@@ -1,5 +1,9 @@
 package kyeah.gitterbomb
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context.CLIPBOARD_SERVICE
+import android.support.v7.widget.PopupMenu
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -28,7 +32,7 @@ class MessageAdapter(val messageList: List<MessageResponse>) : RecyclerView.Adap
         return messageList.count()
     }
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         val icon = view.icon
         val name = view.name
         val timestamp = view.timestamp
@@ -39,6 +43,25 @@ class MessageAdapter(val messageList: List<MessageResponse>) : RecyclerView.Adap
             name.text = messageResponse.fromUser.displayName
             timestamp.text = messageResponse.sent
             text.text = messageResponse.text
+
+            view.setOnLongClickListener {
+                val menu = PopupMenu(view.context, view)
+                menu.menuInflater.inflate(R.menu.message, menu.menu)
+
+                menu.setOnMenuItemClickListener {
+                    when (it.itemId) {
+                        R.id.copy_text -> consume {
+                            val clipboard = view.context.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+                            val clip = ClipData.newPlainText(text.text, text.text)
+                            clipboard.primaryClip = clip
+                        }
+                        R.id.edit -> consume {}
+                        else -> false
+                    }
+                }
+
+                true
+            }
         }
     }
 }
