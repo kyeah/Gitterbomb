@@ -14,7 +14,7 @@ import java.util.*
  * Created by kyeh on 4/16/16.
  */
 
-class ChatFragment : Fragment() {
+class ChatFragment() : Fragment() {
     val log = logger<ChatFragment>()
 
     var roomId: String? = null

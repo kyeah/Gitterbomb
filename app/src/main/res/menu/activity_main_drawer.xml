@@ -36,4 +36,7 @@
             <group android:id="@+id/group_direct_chat"/>
         </menu>
     </item>
+    <item
+        android:id="@+id/explore"
+        android:title="@string/menu_explore"/>
 </menu>

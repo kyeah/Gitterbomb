@@ -83,16 +83,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        val room = rooms[item.title] ?: return false
+        val fragment = when (item.itemId) {
+           R.id.explore -> ExploreFragment()
+           else -> {
+               val room = rooms[item.title] ?: return false
 
-        val bundle = Bundle()
-        val chatFragment = ChatFragment()
-        bundle.putString("roomId", room.id)
-        chatFragment.arguments = bundle
+               val bundle = Bundle()
+               val chatFragment = ChatFragment()
+               bundle.putString("roomId", room.id)
+               chatFragment.arguments = bundle
+               chatFragment
+           }
+        }
 
         supportFragmentManager
                 .beginTransaction()
-                .replace(R.id.content_main, chatFragment)
+                .replace(R.id.content_main, fragment)
                 .commit()
 
         return true
