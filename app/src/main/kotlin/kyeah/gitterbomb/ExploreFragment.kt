@@ -2,6 +2,7 @@ package kyeah.gitterbomb
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -24,7 +25,7 @@ class ExploreFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_explore, container, false)
 
         val gridLayout = GridLayoutManager(activity, 2)
-        roomAdapter = RoomAdapter(rooms)
+        roomAdapter = RoomAdapter(activity as AppCompatActivity, rooms)
         list.layoutManager = gridLayout
         list.adapter = roomAdapter
 

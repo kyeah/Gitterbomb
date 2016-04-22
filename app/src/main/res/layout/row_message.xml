@@ -41,4 +41,4 @@
         android:layout_marginLeft="@dimen/row_message_name_margin"
         android:layout_marginBottom="@dimen/row_message_name_margin"
         tools:text="@string/hipster_ipsum"/>
-</>
+</RelativeLayout>

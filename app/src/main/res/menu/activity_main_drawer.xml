@@ -9,21 +9,21 @@
         </menu>
     </item>
     <item
-        android:Id="@+id/channels"
+        android:id="@+id/channels"
         android:title="@string/menu_channels">
         <menu>
             <group android:id="@+id/group_channels"/>
         </menu>
     </item>
     <item
-        android:Id="@+id/orgs"
+        android:id="@+id/orgs"
         android:title="@string/menu_orgs">
         <menu>
             <group android:id="@+id/group_orgs"/>
         </menu>
     </item>
     <item
-        android:Id="@+id/repos"
+        android:id="@+id/repos"
         android:title="@string/menu_repos">
         <menu>
             <group android:id="@+id/group_repos"/>
