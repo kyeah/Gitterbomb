@@ -8,7 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.amatkivskiy.gitter.sdk.model.response.room.RoomResponse
-import kotlinx.android.synthetic.main.fragment_chat.*
+import kotlinx.android.synthetic.main.fragment_explore.view.*
 import java.util.*
 
 /**
@@ -26,8 +26,8 @@ class ExploreFragment : Fragment() {
 
         val gridLayout = GridLayoutManager(activity, 2)
         roomAdapter = RoomAdapter(activity as AppCompatActivity, rooms)
-        list.layoutManager = gridLayout
-        list.adapter = roomAdapter
+        view.list.layoutManager = gridLayout
+        view.list.adapter = roomAdapter
 
         GitterService.client.suggestedRooms.subscribe({
             rooms.addAll(it)

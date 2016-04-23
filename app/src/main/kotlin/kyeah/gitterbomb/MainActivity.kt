@@ -13,7 +13,6 @@ import com.amatkivskiy.gitter.sdk.model.response.room.RoomResponse
 import com.amatkivskiy.gitter.sdk.model.response.room.RoomType
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.nav_header_main.*
 import java.util.*
 
@@ -21,16 +20,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     data class MenuResult(val menu: SubMenu, val menuId: Int)
 
-    var user: UserResponse? = null;
-    var rooms: HashMap<String, RoomResponse> = HashMap();
+    var user: UserResponse? = null
+    var rooms: HashMap<String, RoomResponse> = HashMap()
+    var prevItem: MenuItem? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        setSupportActionBar(toolbar)
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setHomeButtonEnabled(true)
 
         val toggle = ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+                this, drawer, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
 
         drawer.addDrawerListener(toggle)
         toggle.syncState()
@@ -51,18 +53,25 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         GitterService.client.currentUserRooms.subscribe({
             for (i in IntRange(0, it.size - 1)) {
                 rooms.put(it[i].name, it[i])
-                val result = when (it[i].githubRoomType) {
-                    RoomType.ONETOONE -> MenuResult(menuDirect, R.id.group_direct_chat)
-                    RoomType.ORG, RoomType.ORG_CHANNEL -> MenuResult(menuOrgs, R.id.group_orgs)
-                    RoomType.REPO, RoomType.REPO_CHANNEL -> MenuResult(menuRepos, R.id.group_repos)
-                    RoomType.USER_CHANNEL -> MenuResult(menuChannels, R.id.group_channels)
-                    else -> null
-                }
-                if (result != null) {
-                    result.menu.add(result.menuId, Menu.NONE, Menu.NONE, it[i].name)
+                if (it[i].favourite == 1) {
+                    menuStarred.add(R.id.starred, Menu.NONE, Menu.NONE, it[i].name)
+                } else {
+                    val result = when (it[i].githubRoomType) {
+                        RoomType.ONETOONE -> MenuResult(menuDirect, R.id.group_direct_chat)
+                        RoomType.ORG, RoomType.ORG_CHANNEL -> MenuResult(menuOrgs, R.id.group_orgs)
+                        RoomType.REPO, RoomType.REPO_CHANNEL -> MenuResult(menuRepos, R.id.group_repos)
+                        RoomType.USER_CHANNEL -> MenuResult(menuChannels, R.id.group_channels)
+                        else -> null
+                    }
+                    if (result != null) {
+                        result.menu.add(result.menuId, Menu.NONE, Menu.NONE, it[i].name)
+                    }
                 }
             }
         })
+
+        prevItem = nav.menu.findItem(R.id.explore)
+        prevItem?.isChecked = true
     }
 
     override fun onBackPressed() {
@@ -78,11 +87,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        android.R.id.home -> consume { drawer.toggle() }
         R.id.action_settings -> consume {}
         else -> super.onOptionsItemSelected(item)
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        prevItem?.isChecked = false
+        item.isCheckable = true
+        item.isChecked = true
+        prevItem = item
+
         val fragment = when (item.itemId) {
            R.id.explore -> ExploreFragment()
            else -> {
@@ -96,11 +111,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
            }
         }
 
-        supportFragmentManager
-                .beginTransaction()
-                .replace(R.id.content_main, fragment)
-                .commit()
-
-        return true
+        return drawer.consume {
+            supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.content_main, fragment)
+                    .commit()
+        }
     }
 }

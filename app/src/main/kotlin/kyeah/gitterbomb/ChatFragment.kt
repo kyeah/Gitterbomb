@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import com.amatkivskiy.gitter.sdk.model.response.message.MessageResponse
 import kotlinx.android.synthetic.main.fragment_chat.*
+import kotlinx.android.synthetic.main.fragment_chat.view.*
 import java.util.*
 
 /**
@@ -26,7 +27,7 @@ class ChatFragment() : Fragment() {
         val view = inflater.inflate(R.layout.fragment_chat, container, false)
 
         messageAdapter = MessageAdapter(messages)
-        list.adapter = messageAdapter
+        view.list.adapter = messageAdapter
 
         GitterService.client.getRoomMessages(roomId).subscribe({
             messages.clear()
@@ -38,8 +39,8 @@ class ChatFragment() : Fragment() {
                 messageAdapter?.notifyDataSetChanged()
             })
         })
-        
-        edit_message.setOnEditorActionListener({ textView, i, keyEvent ->
+
+        view.edit_message.setOnEditorActionListener({ textView, i, keyEvent ->
             val res = (i == EditorInfo.IME_ACTION_DONE)
             if (res) {
                 val msg = edit_message.text.toString()

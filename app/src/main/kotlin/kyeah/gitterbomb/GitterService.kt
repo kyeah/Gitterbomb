@@ -8,16 +8,27 @@ import com.amatkivskiy.gitter.sdk.rx.client.RxGitterStreamingApiClient
  */
 
 object GitterService {
-    var client: RxGitterApiClient = null!!
-    var streamingClient: RxGitterStreamingApiClient = null!!
+    private var _client: RxGitterApiClient? = null
+    var client: RxGitterApiClient
+        get() = _client!!
+        set(value) {
+            _client = value
+        }
+
+    private var _streamingClient: RxGitterStreamingApiClient? = null
+    var streamingClient: RxGitterStreamingApiClient
+        get() = _streamingClient!!
+        set(value) {
+            _streamingClient = value
+        }
 
     fun buildClient(access_token: String) {
         client = RxGitterApiClient.Builder()
                 .withAccountToken(access_token)
-                .build();
+                .build()
 
         streamingClient = RxGitterStreamingApiClient.Builder()
                 .withAccountToken(access_token)
-                .build();
+                .build()
     }
 }

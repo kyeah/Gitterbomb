@@ -10,6 +10,7 @@ class WebViewActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_web_view)
         val url = intent.getStringExtra("url")!!
+        web_view.setWebViewClient(RedirectWebViewClient(this))
         web_view.loadUrl(url)
     }
 }
