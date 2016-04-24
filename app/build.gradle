@@ -43,6 +43,7 @@ dependencies {
     compile 'com.trello:rxlifecycle-components:0.4.0'
     compile 'com.android.support:support-v4:23.2.1'
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile 'jp.wasabeef:glide-transformations:2.0.1'
 }
 buildscript {
     ext.kotlin_version = '1.0.1-2'

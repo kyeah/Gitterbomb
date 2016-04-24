@@ -18,6 +18,8 @@
         android:id="@+id/edit_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="@dimen/edit_text_padding"
+        android:hint="@string/send_message"
         android:inputType="textAutoComplete">
         <requestFocus />
     </EditText>

@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/row_message_margin"
     xmlns:tools="http://schemas.android.com/tools">
 
     <ImageView
@@ -11,14 +10,21 @@
         android:layout_height="@dimen/row_message_image_height"
         tools:src="@drawable/ic_menu_send"/>
 
+    <View
+        android:id="@+id/spacer"
+        android:layout_width="@dimen/row_message_image_width"
+        android:layout_height="0dp"
+        />
+
     <TextView
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/icon"
-        android:layout_toEndOf="@id/icon"
-        android:layout_alignTop="@id/icon"
-        android:layout_margin="@dimen/row_message_name_margin"
+        android:layout_toRightOf="@id/spacer"
+        android:layout_toEndOf="@id/spacer"
+        android:layout_alignTop="@id/spacer"
+        android:layout_marginLeft="@dimen/row_message_name_margin"
+        android:layout_marginRight="@dimen/row_message_name_margin"
         android:textStyle="bold"
         tools:text="Kevin Yeh"/>
 
@@ -35,8 +41,8 @@
         android:id="@+id/text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/icon"
-        android:layout_toEndOf="@id/icon"
+        android:layout_toRightOf="@id/spacer"
+        android:layout_toEndOf="@id/spacer"
         android:layout_below="@id/name"
         android:layout_marginLeft="@dimen/row_message_name_margin"
         android:layout_marginBottom="@dimen/row_message_name_margin"

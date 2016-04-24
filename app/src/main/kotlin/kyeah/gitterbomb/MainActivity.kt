@@ -70,8 +70,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         })
 
-        prevItem = nav.menu.findItem(R.id.explore)
-        prevItem?.isChecked = true
+ //       prevItem = nav.menu.findItem(R.id.explore)
+ //       prevItem?.isChecked = true
     }
 
     override fun onBackPressed() {
@@ -102,7 +102,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
            R.id.explore -> ExploreFragment()
            else -> {
                val room = rooms[item.title] ?: return false
-
                val bundle = Bundle()
                val chatFragment = ChatFragment()
                bundle.putString("roomId", room.id)

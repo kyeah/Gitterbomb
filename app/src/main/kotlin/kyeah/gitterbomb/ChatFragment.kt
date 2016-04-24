@@ -2,6 +2,7 @@ package kyeah.gitterbomb
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,9 +26,16 @@ class ChatFragment() : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         roomId = arguments.getString("roomId") ?: return null
         val view = inflater.inflate(R.layout.fragment_chat, container, false)
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val llm = LinearLayoutManager(view.context)
+        llm.orientation = LinearLayoutManager.VERTICAL
+        list.layoutManager = llm
 
         messageAdapter = MessageAdapter(messages)
-        view.list.adapter = messageAdapter
+        list.adapter = messageAdapter
 
         GitterService.client.getRoomMessages(roomId).subscribe({
             messages.clear()
@@ -52,7 +60,5 @@ class ChatFragment() : Fragment() {
             }
             res
         })
-
-        return view
     }
 }
