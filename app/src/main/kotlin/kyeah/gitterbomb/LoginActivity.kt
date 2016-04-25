@@ -17,11 +17,16 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        val access_code = intent.data?.getQueryParameter("code")
-        if (access_code != null) {
-            completeLogin(access_code)
+        val token = UserPreferences.getAccessToken(this)
+        if (token != null) {
+            continueToMain(token)
         } else {
-            loginToGitter()
+            val access_code = intent.data?.getQueryParameter("code")
+            if (access_code == null) {
+                loginToGitter()
+            } else {
+                completeLogin(access_code)
+            }
         }
     }
 
@@ -39,12 +44,17 @@ class LoginActivity : AppCompatActivity() {
     private fun completeLogin(@NonNull access_code: String) {
         val authenticationClient = RxGitterAuthenticationClient.Builder().build();
         authenticationClient.getAccessToken(access_code).subscribe({
-            GitterService.buildClient(it.accessToken)
-            intent = Intent(this, MainActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY or Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent)
+            UserPreferences.setAccessToken(this, it.accessToken)
+            continueToMain(it.accessToken)
         }, {
             log.severe(it.message)
         })
+    }
+
+    private fun continueToMain(accessToken: String) {
+        GitterService.buildClient(accessToken)
+        intent = Intent(this, MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY or Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent)
     }
 }
