@@ -11,7 +11,12 @@ import com.amatkivskiy.gitter.sdk.rx.client.RxGitterAuthenticationClient
 import kyeah.gitterbomb.R.string.*
 
 class LoginActivity : AppCompatActivity() {
-    companion object { val log = logger<LoginActivity>() }
+    companion object {
+        val log = logger<LoginActivity>();
+        val REQUEST_ACCESS_CODE = 0;
+        val RESULT_CANCELLED = 0;
+        val RESULT_OK = 1;
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,12 +26,7 @@ class LoginActivity : AppCompatActivity() {
         if (token != null) {
             continueToMain(token)
         } else {
-            val access_code = intent.data?.getQueryParameter("code")
-            if (access_code == null) {
-                loginToGitter()
-            } else {
-                completeLogin(access_code)
-            }
+            loginToGitter()
         }
     }
 
@@ -37,8 +37,16 @@ class LoginActivity : AppCompatActivity() {
         val gitterAccessUrl = GitterOauthUtils.buildOauthUrl()
         intent = Intent(this, WebViewActivity::class.java)
         intent.putExtra("url", gitterAccessUrl)
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY or Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent)
+        startActivityForResult(intent, REQUEST_ACCESS_CODE)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent) {
+        val access_code = intent.data?.getQueryParameter("code")
+        if (access_code != null) {
+            completeLogin(access_code)
+        } else {
+            log.severe("Failed to receive Gitter access code")
+        }
     }
 
     private fun completeLogin(@NonNull access_code: String) {

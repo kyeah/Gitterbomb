@@ -14,9 +14,10 @@ class RedirectWebViewClient(val activity: Activity): WebViewClient() {
 
     override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
         if (url.startsWith(activity.getString(R.string.uri_login_redirect))) {
-            val intent = Intent(Intent.ACTION_VIEW);
+            val intent = Intent()
             intent.data = Uri.parse(url)
-            activity.startActivity(intent)
+            activity.setResult(LoginActivity.RESULT_OK, intent)
+            activity.finish()
         }
 
         return false
