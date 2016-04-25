@@ -5,7 +5,6 @@ import android.content.ClipboardManager
 import android.content.Context.CLIPBOARD_SERVICE
 import android.support.v7.widget.PopupMenu
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -57,7 +56,6 @@ class MessageAdapter(val messageList: List<MessageResponse>) : RecyclerView.Adap
             }
 
             val margin = (view.resources.getDimension(R.dimen.row_message_margin) / view.resources.displayMetrics.density).toInt()
-            Log.e("TAG", ""+margin)
             if (hide) {
                 icon.visibility = View.GONE
                 name.visibility = View.GONE

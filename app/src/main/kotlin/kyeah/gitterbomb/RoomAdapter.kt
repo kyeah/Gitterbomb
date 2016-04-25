@@ -40,7 +40,7 @@ class RoomAdapter(val activity: AppCompatActivity, val roomList: List<RoomRespon
 
         fun bind(room: RoomResponse) {
             name.text = room.name
-            val index = room.name.lastIndexOf("/")
+            val index = room.name.lastIndexOf('/')
             val coreName = if (index == -1) room.name else room.name.substring(index + 1)
             Glide.with(view.context).load(view.context.getString(R.string.github_avatar_prefix) + coreName + "?s=70").into(icon)
 

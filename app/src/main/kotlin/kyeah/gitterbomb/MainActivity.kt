@@ -99,15 +99,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         prevItem = item
 
         val fragment = when (item.itemId) {
-           R.id.explore -> ExploreFragment()
-           else -> {
-               val room = rooms[item.title] ?: return false
-               val bundle = Bundle()
-               val chatFragment = ChatFragment()
-               bundle.putString("roomId", room.id)
-               chatFragment.arguments = bundle
-               chatFragment
-           }
+            R.id.explore -> ExploreFragment()
+            else -> {
+                val room = rooms[item.title] ?: return false
+                val bundle = Bundle()
+                val chatFragment = ChatFragment()
+                bundle.putString("roomId", room.id)
+                chatFragment.arguments = bundle
+                chatFragment
+            }
         }
 
         return drawer.consume {

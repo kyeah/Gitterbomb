@@ -41,6 +41,7 @@ class ChatFragment() : Fragment() {
             messages.clear()
             messages.addAll(it)
             messageAdapter?.notifyDataSetChanged()
+            list.scrollToPosition(it.size - 1);
 
             GitterService.streamingClient.getRoomMessagesStream(roomId).subscribe({
                 messages.add(it)
