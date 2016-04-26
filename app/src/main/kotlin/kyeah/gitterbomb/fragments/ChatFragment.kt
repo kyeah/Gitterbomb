@@ -1,4 +1,4 @@
-package kyeah.gitterbomb
+package kyeah.gitterbomb.fragments
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -10,6 +10,10 @@ import android.view.inputmethod.EditorInfo
 import com.amatkivskiy.gitter.sdk.model.response.message.MessageResponse
 import kotlinx.android.synthetic.main.fragment_chat.*
 import kotlinx.android.synthetic.main.fragment_chat.view.*
+import kyeah.gitterbomb.network.GitterService
+import kyeah.gitterbomb.views.adapters.MessageAdapter
+import kyeah.gitterbomb.R
+import kyeah.gitterbomb.logger
 import java.util.*
 
 /**

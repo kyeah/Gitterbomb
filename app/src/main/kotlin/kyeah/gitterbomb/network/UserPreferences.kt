@@ -1,4 +1,4 @@
-package kyeah.gitterbomb
+package kyeah.gitterbomb.network
 
 import android.content.Context
 import android.content.SharedPreferences

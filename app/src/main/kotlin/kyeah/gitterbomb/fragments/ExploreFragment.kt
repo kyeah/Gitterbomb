@@ -1,4 +1,4 @@
-package kyeah.gitterbomb
+package kyeah.gitterbomb.fragments
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -9,6 +9,10 @@ import android.view.View
 import android.view.ViewGroup
 import com.amatkivskiy.gitter.sdk.model.response.room.RoomResponse
 import kotlinx.android.synthetic.main.fragment_explore.view.*
+import kyeah.gitterbomb.network.GitterService
+import kyeah.gitterbomb.R
+import kyeah.gitterbomb.views.adapters.RoomAdapter
+import kyeah.gitterbomb.logger
 import java.util.*
 
 /**

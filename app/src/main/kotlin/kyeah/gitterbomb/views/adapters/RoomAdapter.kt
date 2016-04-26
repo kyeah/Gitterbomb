@@ -1,4 +1,4 @@
-package kyeah.gitterbomb
+package kyeah.gitterbomb.views.adapters
 
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -13,6 +13,9 @@ import android.view.ViewGroup
 import com.amatkivskiy.gitter.sdk.model.response.room.RoomResponse
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.row_message.view.*
+import kyeah.gitterbomb.R
+import kyeah.gitterbomb.consume
+import kyeah.gitterbomb.fragments.ChatFragment
 
 /**
  * Created by kyeh on 4/16/16.

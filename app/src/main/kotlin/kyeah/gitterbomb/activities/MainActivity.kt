@@ -1,4 +1,4 @@
-package kyeah.gitterbomb
+package kyeah.gitterbomb.activities
 
 import android.os.Bundle
 import android.support.design.widget.NavigationView
@@ -14,6 +14,12 @@ import com.amatkivskiy.gitter.sdk.model.response.room.RoomType
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.nav_header_main.*
+import kyeah.gitterbomb.R
+import kyeah.gitterbomb.consume
+import kyeah.gitterbomb.fragments.ChatFragment
+import kyeah.gitterbomb.fragments.ExploreFragment
+import kyeah.gitterbomb.network.GitterService
+import kyeah.gitterbomb.toggle
 import java.util.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {

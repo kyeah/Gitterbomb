@@ -1,8 +1,10 @@
-package kyeah.gitterbomb
+package kyeah.gitterbomb.activities
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_web_view.*
+import kyeah.gitterbomb.R
+import kyeah.gitterbomb.network.RedirectWebViewClient
 
 class WebViewActivity : AppCompatActivity() {
 

@@ -1,4 +1,4 @@
-package kyeah.gitterbomb
+package kyeah.gitterbomb.network
 
 import com.amatkivskiy.gitter.sdk.rx.client.RxGitterApiClient
 import com.amatkivskiy.gitter.sdk.rx.client.RxGitterStreamingApiClient

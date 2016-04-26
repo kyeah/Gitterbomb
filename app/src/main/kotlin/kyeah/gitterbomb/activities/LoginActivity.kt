@@ -1,4 +1,4 @@
-package kyeah.gitterbomb
+package kyeah.gitterbomb.activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,7 +8,12 @@ import com.amatkivskiy.gitter.sdk.GitterOauthUtils
 import com.amatkivskiy.gitter.sdk.credentials.GitterDeveloperCredentials
 import com.amatkivskiy.gitter.sdk.credentials.SimpleGitterCredentialsProvider
 import com.amatkivskiy.gitter.sdk.rx.client.RxGitterAuthenticationClient
+import kyeah.gitterbomb.network.GitterService
+import kyeah.gitterbomb.R
 import kyeah.gitterbomb.R.string.*
+import kyeah.gitterbomb.activities.WebViewActivity
+import kyeah.gitterbomb.network.UserPreferences
+import kyeah.gitterbomb.logger
 
 class LoginActivity : AppCompatActivity() {
     companion object {

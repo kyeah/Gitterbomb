@@ -1,4 +1,4 @@
-package kyeah.gitterbomb
+package kyeah.gitterbomb.views.adapters
 
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -12,6 +12,10 @@ import com.amatkivskiy.gitter.sdk.model.response.message.MessageResponse
 import com.bumptech.glide.Glide
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 import kotlinx.android.synthetic.main.row_message.view.*
+import kyeah.gitterbomb.R
+import kyeah.gitterbomb.consume
+import kyeah.gitterbomb.dateToTime
+import kyeah.gitterbomb.stringToDate
 
 /**
  * Created by kyeh on 4/16/16.
