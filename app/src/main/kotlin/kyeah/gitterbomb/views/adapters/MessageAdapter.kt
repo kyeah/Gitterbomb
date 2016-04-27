@@ -3,6 +3,7 @@ package kyeah.gitterbomb.views.adapters
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context.CLIPBOARD_SERVICE
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.PopupMenu
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -16,25 +17,89 @@ import kyeah.gitterbomb.R
 import kyeah.gitterbomb.consume
 import kyeah.gitterbomb.dateToTime
 import kyeah.gitterbomb.stringToDate
+import java.util.*
 
 /**
  * Created by kyeh on 4/16/16.
  */
 
-class MessageAdapter(val messageList: List<MessageResponse>) : RecyclerView.Adapter<MessageAdapter.ViewHolder>() {
+class MessageAdapter(val recyclerView: RecyclerView, var messageList: ArrayList<MessageResponse>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    enum class  ViewType {
+        Progress,
+        Item
+    }
+
+    interface OnLoadMoreListener {
+        fun onLoadMore(size: Int)
+    }
+
+    private val visibleThreshold = 5
+    private var loading =  false
+    private var finishedLoading = false
+    private var _onLoadMoreListener: OnLoadMoreListener? = null
+    var onLoadMoreListener: OnLoadMoreListener?
+        get() = _onLoadMoreListener
+        set(value) {
+            _onLoadMoreListener = value
+        }
+
+    init {
+        val llm = recyclerView.layoutManager as LinearLayoutManager
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView : RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                val lastVisibleItem = llm.findFirstVisibleItemPosition() - visibleThreshold
+                if (!loading && !finishedLoading && lastVisibleItem == 0) {
+                    loading = true
+                    notifyItemInserted(0)
+                    onLoadMoreListener?.onLoadMore(itemCount - 1)
+                }
+            }
+        });
+    }
+
+    fun onLoadFinished(size: Int) {
+        loading = false
+        if (size == itemCount) {
+            finishedLoading = true
+        }
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder? {
         val inflater = LayoutInflater.from(parent.context)
-        val view = inflater.inflate(R.layout.row_message, parent, false)
+        val view = if (viewType == ViewType.Progress.ordinal) {
+            inflater.inflate(R.layout.row_progress, parent, false)
+        } else {
+            inflater.inflate(R.layout.row_message, parent, false)
+        }
         return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(messageList[position], messageList.elementAtOrNull(position-1))
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        if (holder is ViewHolder) {
+            val pos = if (loading) position - 1 else position
+            holder.bind(messageList[pos], messageList.elementAtOrNull(pos-1))
+        } else if (holder is ProgressViewHolder){
+            holder.setIndeterminate(true)
+        }
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        if (loading && position == 0) {
+            return ViewType.Progress.ordinal
+        } else {
+            return ViewType.Item.ordinal
+        }
     }
 
     override fun getItemCount(): Int {
-        return messageList.count()
+        if (loading) {
+            return messageList.count() + 1
+        } else {
+            return messageList.count()
+        }
     }
 
     class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {

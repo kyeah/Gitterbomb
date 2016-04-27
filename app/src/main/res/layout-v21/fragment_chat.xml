@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -8,24 +8,17 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/edit_message"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:padding="@dimen/list_chat_padding"
         android:clipToPadding="false"
         tools:listitem="@layout/row_message"/>
-
-    <View
-        android:layout_height="2dp"
-        android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:background="@drawable/drop_shadow_top"
-        android:layout_alignBottom="@id/list"/>
 
     <EditText
         android:id="@+id/edit_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:elevation="8dp"
         android:padding="@dimen/edit_text_padding"
         android:hint="@string/send_message"
         android:background="@android:color/transparent"
@@ -33,4 +26,4 @@
         <requestFocus />
     </EditText>
 
-</RelativeLayout>
+</LinearLayout>

@@ -7,13 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import com.amatkivskiy.gitter.sdk.model.request.ChatMessagesRequestParams.ChatMessagesRequestParamsBuilder
 import com.amatkivskiy.gitter.sdk.model.response.message.MessageResponse
 import kotlinx.android.synthetic.main.fragment_chat.*
 import kotlinx.android.synthetic.main.fragment_chat.view.*
-import kyeah.gitterbomb.network.GitterService
-import kyeah.gitterbomb.views.adapters.MessageAdapter
 import kyeah.gitterbomb.R
 import kyeah.gitterbomb.logger
+import kyeah.gitterbomb.network.GitterService
+import kyeah.gitterbomb.views.adapters.MessageAdapter
 import java.util.*
 
 /**
@@ -38,7 +39,16 @@ class ChatFragment() : Fragment() {
         llm.orientation = LinearLayoutManager.VERTICAL
         list.layoutManager = llm
 
-        messageAdapter = MessageAdapter(messages)
+        messageAdapter = MessageAdapter(list, messages)
+        messageAdapter?.onLoadMoreListener = object: MessageAdapter.OnLoadMoreListener {
+            override fun onLoadMore(size: Int) {
+                val params = ChatMessagesRequestParamsBuilder().beforeId(messages[0].id).build()
+                GitterService.client.getRoomMessages(roomId, params).subscribe({
+                    messages.addAll(0, it)
+                    messageAdapter?.onLoadFinished(size)
+                })
+            }
+        }
         list.adapter = messageAdapter
 
         GitterService.client.getRoomMessages(roomId).subscribe({
