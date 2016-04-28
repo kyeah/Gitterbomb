@@ -19,6 +19,7 @@ import kyeah.gitterbomb.R
 import kyeah.gitterbomb.logger
 import kyeah.gitterbomb.network.GitterService
 import kyeah.gitterbomb.views.adapters.MessageAdapter
+import rx.android.schedulers.AndroidSchedulers
 import java.util.*
 
 /**
@@ -51,10 +52,12 @@ class ChatFragment() : Fragment() {
         messageAdapter?.onLoadMoreListener = object: MessageAdapter.OnLoadMoreListener {
             override fun onLoadMore(size: Int) {
                 val params = ChatMessagesRequestParamsBuilder().beforeId(messages[0].id).build()
-                GitterService.client.getRoomMessages(roomId, params).subscribe({
-                    messages.addAll(0, it)
-                    messageAdapter?.onLoadFinished(size)
-                })
+                GitterService.client.getRoomMessages(roomId, params)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({
+                            messages.addAll(0, it)
+                            messageAdapter?.onLoadFinished(size)
+                        })
             }
         }
 
@@ -64,34 +67,41 @@ class ChatFragment() : Fragment() {
         animAdapter.setDuration(200)
         list.adapter = animAdapter
 
-        GitterService.client.getRoomMessages(roomId).subscribe({
-            messages.clear()
-            messages.addAll(it)
-            messageAdapter?.notifyDataSetChanged()
-            list.scrollToPosition(it.size - 1)
+        GitterService.client.getRoomMessages(roomId)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    messages.clear()
+                    messages.addAll(it)
+                    messageAdapter?.notifyDataSetChanged()
+                    list.scrollToPosition(it.size - 1)
 
-            GitterService.streamingClient.getRoomMessagesStream(roomId).retry().subscribe({
-                Log.e("GOT ROOM MESSAGE", it.toString())
-                messages.add(it)
-                messageAdapter?.notifyItemInserted(messages.size - 1)
-            }, {
-                Log.e("FAILED", "ya", it)
-            }, {
-                Log.e("COM", "PLETE???")
-            })
-        })
+                    GitterService.streamingClient.getRoomMessagesStream(roomId)
+                            .retry()
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe({
+                                Log.e("GOT ROOM MESSAGE", it.toString())
+                                messages.add(it)
+                                messageAdapter?.notifyItemInserted(messages.size - 1)
+                            }, {
+                                Log.e("FAILED", "ya", it)
+                            }, {
+                                Log.e("COM", "PLETE???")
+                            })
+                })
 
         view.edit_message.hint = "Message #$roomName"
         view.edit_message.setOnEditorActionListener({ textView, i, keyEvent ->
             val res = (i == EditorInfo.IME_ACTION_DONE)
             if (res) {
                 val msg = edit_message.text.toString()
-                GitterService.client.sendMessage(roomId, msg).subscribe({
-                    log.info("Sent message '$msg' to '$roomId'")
-                    edit_message.text.clear()
-                }, {
-                    Toast.makeText(edit_message.context, "Failed to send message to '$roomName'", Toast.LENGTH_LONG).show()
-                })
+                GitterService.client.sendMessage(roomId, msg)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({
+                            log.info("Sent message '$msg' to '$roomId'")
+                            edit_message.text.clear()
+                        }, {
+                            Toast.makeText(edit_message.context, "Failed to send message to '$roomName'", Toast.LENGTH_LONG).show()
+                        })
             }
             res
         })

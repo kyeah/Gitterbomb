@@ -17,6 +17,7 @@ import kyeah.gitterbomb.R
 import kyeah.gitterbomb.consume
 import kyeah.gitterbomb.fragments.ChatFragment
 import kyeah.gitterbomb.network.GitterService
+import rx.android.schedulers.AndroidSchedulers
 
 /**
  * Created by kyeh on 4/16/16.
@@ -49,7 +50,9 @@ class RoomAdapter(val activity: AppCompatActivity, val roomList: List<RoomRespon
             Glide.with(view.context).load(view.context.getString(R.string.github_avatar_prefix) + coreName + "?s=70").into(icon)
 
             view.setOnClickListener {
-                GitterService.client.joinRoom(room.uri).subscribe({
+                GitterService.client.joinRoom(room.uri)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
                     val bundle = Bundle()
                     val chatFragment = ChatFragment()
                     bundle.putString("roomId", room.id)

@@ -20,6 +20,7 @@ import kyeah.gitterbomb.fragments.ChatFragment
 import kyeah.gitterbomb.fragments.ExploreFragment
 import kyeah.gitterbomb.network.GitterService
 import kyeah.gitterbomb.toggle
+import rx.android.schedulers.AndroidSchedulers
 import java.util.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -56,34 +57,39 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val menuRepos = nav.menu.findItem(R.id.repos).subMenu
         val menuDirect = nav.menu.findItem(R.id.direct_chat).subMenu
 
-        GitterService.client.currentUser.subscribe({
-            user = it
-            username.text = user?.displayName
-            Glide.with(this).load(user?.avatarUrlSmall).into(userImage)
-        })
+        GitterService.client.currentUser
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    user = it
+                    username.text = user?.displayName
+                    Glide.with(this).load(user?.avatarUrlSmall).into(userImage)
+                })
 
-        GitterService.client.currentUserRooms.subscribe({
-            for (i in IntRange(0, it.size - 1)) {
-                rooms.put(it[i].name, it[i])
-                if (it[i].favourite == 1) {
-                    menuStarred.add(R.id.starred, Menu.NONE, Menu.NONE, it[i].name)
-                } else {
-                    val result = when (it[i].githubRoomType) {
-                        RoomType.ONETOONE -> MenuResult(menuDirect, R.id.group_direct_chat)
-                        RoomType.ORG, RoomType.ORG_CHANNEL -> MenuResult(menuOrgs, R.id.group_orgs)
-                        RoomType.REPO, RoomType.REPO_CHANNEL -> MenuResult(menuRepos, R.id.group_repos)
-                        RoomType.USER_CHANNEL -> MenuResult(menuChannels, R.id.group_channels)
-                        else -> null
+        GitterService.client.currentUserRooms
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    for (i in IntRange(0, it.size - 1)) {
+                        rooms.put(it[i].name, it[i])
+                        if (it[i].favourite == 1) {
+                            menuStarred.add(R.id.starred, Menu.NONE, Menu.NONE, it[i].name)
+                        } else {
+                            val result = when (it[i].githubRoomType) {
+                                RoomType.ONETOONE -> MenuResult(menuDirect, R.id.group_direct_chat)
+                                RoomType.ORG, RoomType.ORG_CHANNEL -> MenuResult(menuOrgs, R.id.group_orgs)
+                                RoomType.REPO, RoomType.REPO_CHANNEL -> MenuResult(menuRepos, R.id.group_repos)
+                                RoomType.USER_CHANNEL -> MenuResult(menuChannels, R.id.group_channels)
+                                else -> null
                     }
-                    if (result != null) {
-                        result.menu.add(result.menuId, Menu.NONE, Menu.NONE, it[i].name)
+                            if (result != null) {
+                                result.menu.add(result.menuId, Menu.NONE, Menu.NONE, it[i].name)
+                            }
+                        }
                     }
-                }
-            }
-        })
+                })
 
- //       prevItem = nav.menu.findItem(R.id.explore)
- //       prevItem?.isChecked = true
+        prevItem = nav.menu.findItem(R.id.explore)
+        prevItem?.isChecked = true
+
     }
 
     override fun onBackPressed() {
