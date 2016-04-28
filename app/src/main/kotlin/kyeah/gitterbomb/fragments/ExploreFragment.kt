@@ -13,6 +13,7 @@ import kyeah.gitterbomb.R
 import kyeah.gitterbomb.logger
 import kyeah.gitterbomb.network.GitterService
 import kyeah.gitterbomb.views.adapters.RoomAdapter
+import rx.android.schedulers.AndroidSchedulers
 import java.util.*
 
 /**
@@ -34,10 +35,12 @@ class ExploreFragment : Fragment() {
         view.list.layoutManager = gridLayout
         view.list.adapter = roomAdapter
 
-        GitterService.client.suggestedRooms.subscribe({
-            rooms.addAll(it)
-            roomAdapter?.notifyDataSetChanged()
-        })
+        GitterService.client.suggestedRooms
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    rooms.addAll(it)
+                    roomAdapter?.notifyDataSetChanged()
+                })
 
         return view
     }

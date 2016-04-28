@@ -1,7 +1,6 @@
 package kyeah.gitterbomb.activities
 
 import android.os.Bundle
-import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
@@ -12,6 +11,7 @@ import com.amatkivskiy.gitter.sdk.model.response.UserResponse
 import com.amatkivskiy.gitter.sdk.model.response.room.RoomResponse
 import com.amatkivskiy.gitter.sdk.model.response.room.RoomType
 import com.bumptech.glide.Glide
+import com.jakewharton.rxbinding.support.design.widget.RxNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.nav_header_main.*
 import kyeah.gitterbomb.R
@@ -23,7 +23,7 @@ import kyeah.gitterbomb.toggle
 import rx.android.schedulers.AndroidSchedulers
 import java.util.*
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : AppCompatActivity() {
 
     data class MenuResult(val menu: SubMenu, val menuId: Int)
 
@@ -49,7 +49,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 this, drawer, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
 
         drawer.addDrawerListener(toggle!!)
-        nav.setNavigationItemSelectedListener(this)
+        RxNavigationView.itemSelections(nav)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ onNavigationItemSelected(it) })
 
         val menuStarred = nav.menu.findItem(R.id.starred).subMenu
         val menuChannels = nav.menu.findItem(R.id.channels).subMenu
@@ -87,9 +89,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     }
                 })
 
-        prevItem = nav.menu.findItem(R.id.explore)
-        prevItem?.isChecked = true
-
+        //prevItem = nav.menu.findItem(R.id.explore)
+        //prevItem?.isChecked = true
     }
 
     override fun onBackPressed() {
@@ -110,7 +111,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         else -> super.onOptionsItemSelected(item)
     }
 
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+    fun onNavigationItemSelected(item: MenuItem): Boolean {
         prevItem?.isChecked = false
         item.isCheckable = true
         item.isChecked = true
