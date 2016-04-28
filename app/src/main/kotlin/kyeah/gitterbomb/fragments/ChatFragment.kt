@@ -3,10 +3,12 @@ package kyeah.gitterbomb.fragments
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.widget.Toast
 import com.amatkivskiy.gitter.sdk.model.request.ChatMessagesRequestParams.ChatMessagesRequestParamsBuilder
 import com.amatkivskiy.gitter.sdk.model.response.message.MessageResponse
 import kotlinx.android.synthetic.main.fragment_chat.*
@@ -24,13 +26,16 @@ import java.util.*
 class ChatFragment() : Fragment() {
     val log = logger<ChatFragment>()
 
+    var roomName: String? = null
     var roomId: String? = null
     var messageAdapter: MessageAdapter? = null
     var messages: ArrayList<MessageResponse> = ArrayList()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         roomId = arguments.getString("roomId") ?: return null
+        roomName = arguments.getString("roomName")
         val view = inflater.inflate(R.layout.fragment_chat, container, false)
+        activity.title = roomName
         return view
     }
 
@@ -55,22 +60,29 @@ class ChatFragment() : Fragment() {
             messages.clear()
             messages.addAll(it)
             messageAdapter?.notifyDataSetChanged()
-            list.scrollToPosition(it.size - 1);
+            list.scrollToPosition(it.size - 1)
 
             GitterService.streamingClient.getRoomMessagesStream(roomId).subscribe({
+                Log.e("GOT ROOM MESSAGE", it.toString())
                 messages.add(it)
                 messageAdapter?.notifyDataSetChanged()
+            }, {
+                Log.e("FAILED", "ya", it)
+            }, {
+                Log.e("COM", "PLETE???")
             })
         })
 
+        view.edit_message.hint = "Message #$roomName"
         view.edit_message.setOnEditorActionListener({ textView, i, keyEvent ->
             val res = (i == EditorInfo.IME_ACTION_DONE)
             if (res) {
                 val msg = edit_message.text.toString()
                 GitterService.client.sendMessage(roomId, msg).subscribe({
                     log.info("Sent message '$msg' to '$roomId'")
+                    edit_message.text.clear()
                 }, {
-                    log.severe("Failed to send message '$msg' to '$roomId'")
+                    Toast.makeText(edit_message.context, "Failed to send message to '$roomName'", Toast.LENGTH_LONG).show()
                 })
             }
             res

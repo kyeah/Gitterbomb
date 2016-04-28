@@ -9,10 +9,10 @@ import android.view.View
 import android.view.ViewGroup
 import com.amatkivskiy.gitter.sdk.model.response.room.RoomResponse
 import kotlinx.android.synthetic.main.fragment_explore.view.*
-import kyeah.gitterbomb.network.GitterService
 import kyeah.gitterbomb.R
-import kyeah.gitterbomb.views.adapters.RoomAdapter
 import kyeah.gitterbomb.logger
+import kyeah.gitterbomb.network.GitterService
+import kyeah.gitterbomb.views.adapters.RoomAdapter
 import java.util.*
 
 /**
@@ -26,6 +26,7 @@ class ExploreFragment : Fragment() {
     var rooms: ArrayList<RoomResponse> = ArrayList()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        activity.title = "Explore Rooms"
         val view = inflater.inflate(R.layout.fragment_explore, container, false)
 
         val gridLayout = GridLayoutManager(activity, 2)

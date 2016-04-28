@@ -66,7 +66,8 @@ class LoginActivity : AppCompatActivity() {
     private fun continueToMain(accessToken: String) {
         GitterService.buildClient(accessToken)
         intent = Intent(this, MainActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY or Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
         startActivity(intent)
+        finish()
     }
 }

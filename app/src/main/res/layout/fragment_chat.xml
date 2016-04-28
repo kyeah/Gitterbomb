@@ -5,6 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <EditText
+        android:id="@+id/edit_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:padding="@dimen/edit_text_padding"
+        android:hint="@string/send_message"
+        android:background="@android:color/transparent"
+        android:inputType="textAutoComplete">
+        <requestFocus />
+    </EditText>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/list"
         android:layout_width="match_parent"
@@ -20,17 +32,5 @@
         android:orientation="vertical"
         android:background="@drawable/drop_shadow_top"
         android:layout_alignBottom="@id/list"/>
-
-    <EditText
-        android:id="@+id/edit_message"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:padding="@dimen/edit_text_padding"
-        android:hint="@string/send_message"
-        android:background="@android:color/transparent"
-        android:inputType="textAutoComplete">
-        <requestFocus />
-    </EditText>
 
 </RelativeLayout>

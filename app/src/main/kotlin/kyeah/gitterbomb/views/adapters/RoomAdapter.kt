@@ -16,6 +16,7 @@ import kotlinx.android.synthetic.main.row_message.view.*
 import kyeah.gitterbomb.R
 import kyeah.gitterbomb.consume
 import kyeah.gitterbomb.fragments.ChatFragment
+import kyeah.gitterbomb.network.GitterService
 
 /**
  * Created by kyeh on 4/16/16.
@@ -42,21 +43,23 @@ class RoomAdapter(val activity: AppCompatActivity, val roomList: List<RoomRespon
         val name = view.name
 
         fun bind(room: RoomResponse) {
-            name.text = room.name
-            val index = room.name.lastIndexOf('/')
-            val coreName = if (index == -1) room.name else room.name.substring(index + 1)
+            name.text = room.uri
+            val index = room.uri.lastIndexOf('/')
+            val coreName = if (index == -1) room.uri else room.uri.substring(index + 1)
             Glide.with(view.context).load(view.context.getString(R.string.github_avatar_prefix) + coreName + "?s=70").into(icon)
 
             view.setOnClickListener {
-                val bundle = Bundle()
-                val chatFragment = ChatFragment()
-                bundle.putString("roomId", room.id)
-                chatFragment.arguments = bundle
+                GitterService.client.joinRoom(room.uri).subscribe({
+                    val bundle = Bundle()
+                    val chatFragment = ChatFragment()
+                    bundle.putString("roomId", room.id)
+                    chatFragment.arguments = bundle
 
-                activity.supportFragmentManager
-                        .beginTransaction()
-                        .replace(R.id.content_main, chatFragment)
-                        .commit()
+                    activity.supportFragmentManager
+                            .beginTransaction()
+                            .replace(R.id.content_main, chatFragment)
+                            .commit()
+                })
             }
 
             view.setOnLongClickListener {

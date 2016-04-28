@@ -19,9 +19,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:elevation="8dp"
+        android:translationZ="8dp"
+        android:textSize="16sp"
         android:padding="@dimen/edit_text_padding"
         android:hint="@string/send_message"
-        android:background="@android:color/transparent"
+        android:background="@android:color/white"
         android:inputType="textAutoComplete">
         <requestFocus />
     </EditText>

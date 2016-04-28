@@ -23,17 +23,11 @@ import java.util.*
  * Created by kyeh on 4/16/16.
  */
 
-class MessageAdapter(val recyclerView: RecyclerView, var messageList: ArrayList<MessageResponse>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    enum class  ViewType {
-        Progress,
-        Item
-    }
-
+class MessageAdapter(val recyclerView: RecyclerView, var messageList: ArrayList<MessageResponse>) : RecyclerView.Adapter<MessageAdapter.ViewHolder>() {
     interface OnLoadMoreListener {
         fun onLoadMore(size: Int)
     }
 
-    private val visibleThreshold = 5
     private var loading =  false
     private var finishedLoading = false
     private var _onLoadMoreListener: OnLoadMoreListener? = null
@@ -46,13 +40,14 @@ class MessageAdapter(val recyclerView: RecyclerView, var messageList: ArrayList<
     init {
         val llm = recyclerView.layoutManager as LinearLayoutManager
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            private val visibleThreshold = 3
+
             override fun onScrolled(recyclerView : RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy);
+                super.onScrolled(recyclerView, dx, dy)
 
                 val lastVisibleItem = llm.findFirstVisibleItemPosition() - visibleThreshold
-                if (!loading && !finishedLoading && lastVisibleItem == 0) {
+                if (!loading && !finishedLoading && lastVisibleItem <= 0) {
                     loading = true
-                    notifyItemInserted(0)
                     onLoadMoreListener?.onLoadMore(itemCount - 1)
                 }
             }
@@ -65,41 +60,21 @@ class MessageAdapter(val recyclerView: RecyclerView, var messageList: ArrayList<
             finishedLoading = true
         }
         notifyDataSetChanged()
+        recyclerView.scrollToPosition(itemCount - size)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder? {
         val inflater = LayoutInflater.from(parent.context)
-        val view = if (viewType == ViewType.Progress.ordinal) {
-            inflater.inflate(R.layout.row_progress, parent, false)
-        } else {
-            inflater.inflate(R.layout.row_message, parent, false)
-        }
+        val view = inflater.inflate(R.layout.row_message, parent, false)
         return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is ViewHolder) {
-            val pos = if (loading) position - 1 else position
-            holder.bind(messageList[pos], messageList.elementAtOrNull(pos-1))
-        } else if (holder is ProgressViewHolder){
-            holder.setIndeterminate(true)
-        }
-    }
-
-    override fun getItemViewType(position: Int): Int {
-        if (loading && position == 0) {
-            return ViewType.Progress.ordinal
-        } else {
-            return ViewType.Item.ordinal
-        }
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bind(messageList[position], messageList.elementAtOrNull(position - 1))
     }
 
     override fun getItemCount(): Int {
-        if (loading) {
-            return messageList.count() + 1
-        } else {
-            return messageList.count()
-        }
+        return messageList.count()
     }
 
     class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {

@@ -6,12 +6,13 @@
     android:layout_height="wrap_content">
 
     <ImageView
-    android:id="@+id/icon"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:adjustViewBounds="true"
-    android:scaleType="fitCenter"
-    tools:src="@drawable/ic_menu_send" />
+        android:id="@+id/icon"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        tools:src="@drawable/ic_menu_send" />
 
     <TextView
         android:id="@+id/name"

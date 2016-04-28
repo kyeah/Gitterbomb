@@ -2,6 +2,9 @@ package kyeah.gitterbomb.network
 
 import com.amatkivskiy.gitter.sdk.rx.client.RxGitterApiClient
 import com.amatkivskiy.gitter.sdk.rx.client.RxGitterStreamingApiClient
+import okhttp3.OkHttpClient
+import retrofit.client.OkClient
+import java.util.concurrent.TimeUnit
 
 /**
  * Created by kyeh on 4/13/16.
@@ -27,8 +30,10 @@ object GitterService {
                 .withAccountToken(access_token)
                 .build()
 
+        val okClient = OkHttpClient.Builder().connectTimeout(10, TimeUnit.MINUTES)
         streamingClient = RxGitterStreamingApiClient.Builder()
                 .withAccountToken(access_token)
+                .withClient(OkClient(okClient))
                 .build()
     }
 }

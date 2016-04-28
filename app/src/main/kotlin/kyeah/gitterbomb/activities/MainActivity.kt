@@ -29,6 +29,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     var user: UserResponse? = null
     var rooms: HashMap<String, RoomResponse> = HashMap()
     var prevItem: MenuItem? = null
+    private var toggle: ActionBarDrawerToggle? = null
+
+    override fun onPostCreate(savedInstanceState: Bundle?) {
+        super.onPostCreate(savedInstanceState)
+        toggle?.syncState()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,11 +44,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeButtonEnabled(true)
 
-        val toggle = ActionBarDrawerToggle(
+        toggle = ActionBarDrawerToggle(
                 this, drawer, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
 
-        drawer.addDrawerListener(toggle)
-        toggle.syncState()
+        drawer.addDrawerListener(toggle!!)
         nav.setNavigationItemSelectedListener(this)
 
         val menuStarred = nav.menu.findItem(R.id.starred).subMenu
@@ -106,11 +111,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         prevItem = item
 
         val fragment = when (item.itemId) {
-            R.id.explore -> ExploreFragment()
+            R.id.explore -> {
+                ExploreFragment()
+            }
             else -> {
                 val room = rooms[item.title] ?: return false
                 val bundle = Bundle()
                 val chatFragment = ChatFragment()
+                bundle.putString("roomName", room.name)
                 bundle.putString("roomId", room.id)
                 chatFragment.arguments = bundle
                 chatFragment
