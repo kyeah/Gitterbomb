@@ -11,6 +11,8 @@ import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import com.amatkivskiy.gitter.sdk.model.request.ChatMessagesRequestParams.ChatMessagesRequestParamsBuilder
 import com.amatkivskiy.gitter.sdk.model.response.message.MessageResponse
+import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter
+import jp.wasabeef.recyclerview.animators.FadeInAnimator
 import kotlinx.android.synthetic.main.fragment_chat.*
 import kotlinx.android.synthetic.main.fragment_chat.view.*
 import kyeah.gitterbomb.R
@@ -42,6 +44,7 @@ class ChatFragment() : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val llm = LinearLayoutManager(view.context)
         llm.orientation = LinearLayoutManager.VERTICAL
+        llm.stackFromEnd = true
         list.layoutManager = llm
 
         messageAdapter = MessageAdapter(list, messages)
@@ -54,7 +57,12 @@ class ChatFragment() : Fragment() {
                 })
             }
         }
-        list.adapter = messageAdapter
+
+        list.itemAnimator = FadeInAnimator()
+        list.itemAnimator.addDuration = 200
+        val animAdapter = AlphaInAnimationAdapter(messageAdapter)
+        animAdapter.setDuration(200)
+        list.adapter = animAdapter
 
         GitterService.client.getRoomMessages(roomId).subscribe({
             messages.clear()
@@ -62,10 +70,10 @@ class ChatFragment() : Fragment() {
             messageAdapter?.notifyDataSetChanged()
             list.scrollToPosition(it.size - 1)
 
-            GitterService.streamingClient.getRoomMessagesStream(roomId).subscribe({
+            GitterService.streamingClient.getRoomMessagesStream(roomId).retry().subscribe({
                 Log.e("GOT ROOM MESSAGE", it.toString())
                 messages.add(it)
-                messageAdapter?.notifyDataSetChanged()
+                messageAdapter?.notifyItemInserted(messages.size - 1)
             }, {
                 Log.e("FAILED", "ya", it)
             }, {

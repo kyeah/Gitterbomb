@@ -45,6 +45,7 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile 'jp.wasabeef:glide-transformations:2.0.1'
     compile 'com.squareup.okhttp:okhttp:2.6.0'
+    compile 'jp.wasabeef:recyclerview-animators:2.2.3'
 }
 
 buildscript {

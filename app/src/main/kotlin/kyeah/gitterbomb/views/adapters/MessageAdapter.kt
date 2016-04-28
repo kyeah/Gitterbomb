@@ -31,6 +31,7 @@ class MessageAdapter(val recyclerView: RecyclerView, var messageList: ArrayList<
     private var loading =  false
     private var finishedLoading = false
     private var _onLoadMoreListener: OnLoadMoreListener? = null
+
     var onLoadMoreListener: OnLoadMoreListener?
         get() = _onLoadMoreListener
         set(value) {
@@ -59,8 +60,7 @@ class MessageAdapter(val recyclerView: RecyclerView, var messageList: ArrayList<
         if (size == itemCount) {
             finishedLoading = true
         } else {
-            notifyDataSetChanged()
-            recyclerView.scrollToPosition(itemCount - size)
+            notifyItemRangeInserted(0, itemCount - size)
         }
     }
 
