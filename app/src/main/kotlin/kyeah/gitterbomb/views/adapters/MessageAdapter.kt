@@ -48,7 +48,7 @@ class MessageAdapter(val recyclerView: RecyclerView, var messageList: ArrayList<
                 val lastVisibleItem = llm.findFirstVisibleItemPosition() - visibleThreshold
                 if (!loading && !finishedLoading && lastVisibleItem <= 0) {
                     loading = true
-                    onLoadMoreListener?.onLoadMore(itemCount - 1)
+                    onLoadMoreListener?.onLoadMore(itemCount)
                 }
             }
         });
@@ -58,9 +58,10 @@ class MessageAdapter(val recyclerView: RecyclerView, var messageList: ArrayList<
         loading = false
         if (size == itemCount) {
             finishedLoading = true
+        } else {
+            notifyDataSetChanged()
+            recyclerView.scrollToPosition(itemCount - size)
         }
-        notifyDataSetChanged()
-        recyclerView.scrollToPosition(itemCount - size)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder? {

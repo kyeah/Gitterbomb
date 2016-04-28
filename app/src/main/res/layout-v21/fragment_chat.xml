@@ -25,7 +25,6 @@
         android:hint="@string/send_message"
         android:background="@android:color/white"
         android:inputType="textAutoComplete">
-        <requestFocus />
     </EditText>
 
 </LinearLayout>

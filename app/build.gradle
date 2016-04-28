@@ -44,9 +44,7 @@ dependencies {
     compile 'com.android.support:support-v4:23.2.1'
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile 'jp.wasabeef:glide-transformations:2.0.1'
-    compile 'com.squareup.okio:okio:1.7.0'
-
-    compile 'com.squareup.okhttp3:okhttp:3.2.0'
+    compile 'com.squareup.okhttp:okhttp:2.6.0'
 }
 
 buildscript {
