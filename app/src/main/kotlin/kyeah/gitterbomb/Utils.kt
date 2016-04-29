@@ -2,6 +2,9 @@ package kyeah.gitterbomb
 
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
+import android.widget.ImageView
+import com.bumptech.glide.Glide
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.logging.Logger
@@ -47,6 +50,17 @@ inline fun dateToTime(date: Date?): String {
     } else {
         ""
     }
+}
+
+inline fun ImageView.loadUrl(url: String) {
+    Glide.with(context).load(url).into(this)
+}
+
+inline fun ImageView.loadUrlRounded(url: String, corners: Int) {
+    Glide.with(context)
+            .load(url)
+            .bitmapTransform(RoundedCornersTransformation(context, corners, corners))
+            .into(this)
 }
 
 inline fun <reified T:Any> logger() = Logger.getLogger(T::class.java.toString())

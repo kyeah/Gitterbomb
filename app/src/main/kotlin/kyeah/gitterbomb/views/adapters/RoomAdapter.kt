@@ -11,11 +11,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.amatkivskiy.gitter.sdk.model.response.room.RoomResponse
-import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.row_message.view.*
 import kyeah.gitterbomb.R
 import kyeah.gitterbomb.consume
 import kyeah.gitterbomb.fragments.ChatFragment
+import kyeah.gitterbomb.loadUrl
 import kyeah.gitterbomb.network.GitterService
 import rx.android.schedulers.AndroidSchedulers
 
@@ -47,7 +47,7 @@ class RoomAdapter(val activity: AppCompatActivity, val roomList: List<RoomRespon
             name.text = room.uri
             val index = room.uri.lastIndexOf('/')
             val coreName = if (index == -1) room.uri else room.uri.substring(index + 1)
-            Glide.with(view.context).load(view.context.getString(R.string.github_avatar_prefix) + coreName + "?s=70").into(icon)
+            icon.loadUrl(view.context.getString(R.string.github_avatar_prefix) + coreName + "?s=70")
 
             view.setOnClickListener {
                 GitterService.client.joinRoom(room.uri)

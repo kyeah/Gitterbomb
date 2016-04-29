@@ -10,13 +10,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.amatkivskiy.gitter.sdk.model.response.message.MessageResponse
-import com.bumptech.glide.Glide
-import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 import kotlinx.android.synthetic.main.row_message.view.*
-import kyeah.gitterbomb.R
-import kyeah.gitterbomb.consume
-import kyeah.gitterbomb.dateToTime
-import kyeah.gitterbomb.stringToDate
+import kyeah.gitterbomb.*
 import java.util.*
 
 /**
@@ -112,11 +107,7 @@ class MessageAdapter(val recyclerView: RecyclerView, var messageList: ArrayList<
                 timestamp.visibility = View.VISIBLE
                 (view.layoutParams as RecyclerView.LayoutParams).setMargins(margin, margin*2, margin, 0)
 
-                Glide.with(icon.context)
-                        .load(messageResponse.fromUser.avatarUrlSmall)
-                        .bitmapTransform(RoundedCornersTransformation(icon.context, 4, 4))
-                        .into(icon)
-
+                icon.loadUrlRounded(messageResponse.fromUser.avatarUrlSmall, 4)
                 name.text = messageResponse.fromUser.displayName
                 timestamp.text = dateToTime(date)
             }
