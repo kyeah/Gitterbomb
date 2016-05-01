@@ -8,7 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.amatkivskiy.gitter.sdk.model.response.room.RoomResponse
-import kotlinx.android.synthetic.main.fragment_explore.view.*
+import kotlinx.android.synthetic.main.fragment_explore.*
 import kyeah.gitterbomb.R
 import kyeah.gitterbomb.logger
 import kyeah.gitterbomb.network.GitterService
@@ -29,11 +29,14 @@ class ExploreFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         activity.title = "Explore Rooms"
         val view = inflater.inflate(R.layout.fragment_explore, container, false)
+        return view
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val gridLayout = GridLayoutManager(activity, 2)
         roomAdapter = RoomAdapter(activity as AppCompatActivity, rooms)
-        view.list.layoutManager = gridLayout
-        view.list.adapter = roomAdapter
+        list.layoutManager = gridLayout
+        list.adapter = roomAdapter
 
         GitterService.client.suggestedRooms
                 .observeOn(AndroidSchedulers.mainThread())
@@ -41,7 +44,5 @@ class ExploreFragment : Fragment() {
                     rooms.addAll(it)
                     roomAdapter?.notifyDataSetChanged()
                 })
-
-        return view
     }
 }
