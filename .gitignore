@@ -6,3 +6,5 @@
 /build
 /captures
 app/src/main/res/values/auth.xml
+/library/core/build
+/library/rx/build
