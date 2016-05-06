@@ -5,3 +5,5 @@
 Why doesn't the Gitter app use its navigation drawer? Where are the notification settings? Is this running in a WebView? WHY DO YOU KEEP CRASHING??
 
 Make Gitter for Android Great Again, using new-wave Kotlin tactics.
+
+Also update the Gitteroid API client.
